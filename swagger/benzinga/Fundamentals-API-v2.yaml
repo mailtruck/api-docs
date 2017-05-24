@@ -62,7 +62,7 @@ paths:
         "200":
           description: "An object including a response array containing an array of objects containing company data"
           schema:
-            $ref: '#/definitions/FundamentalsResponse'
+            $ref: '#/definitions/FundamentalsFinancialsResponse'
 
 securityDefinitions:
   token:
@@ -91,6 +91,10 @@ definitions:
               $ref: '#/definitions/financialStatements'
             valuationRatios:
               $ref: '#/definitions/valuationRatios'
+            operationRatios:
+              $ref: '#/definitions/operationRatios'
+            alphaBeta:
+              $ref: '#/definitions/alphaBeta'
             processingTimeMillis:
               type: integer
 
@@ -378,10 +382,14 @@ definitions:
   operationRatios:
     type: object
     properties:
-      9M: '#/definitions/operationRatio'
-      6M: '#/definitions/operationRatio'
-      1Y: '#/definitions/operationRatio'
-      3M': '#/definitions/operationRatio'
+      9M: 
+        $ref: '#/definitions/operationRatio'
+      6M:
+        $ref: '#/definitions/operationRatio'
+      1Y: 
+        $ref: '#/definitions/operationRatio'
+      3M: 
+        $ref: '#/definitions/operationRatio'
     description: Different periods may be returned for different companies
 
   operationRatio:
@@ -485,26 +493,29 @@ definitions:
         type: number
         format: float
 
-    alphaBeta:
-      type: object
-      properties:
-        60M: $ref '#/definitions/alphaBetaObj'
-        120M: $ref '#/definitions/alphaBetaObj'
-        36M: $ref '#/definitions/alphaBetaObj'
+  alphaBeta:
+    type: object
+    properties:
+      "60M":
+        $ref: '#/definitions/alphaBetaObj'
+      "120M":
+        $ref: '#/definitions/alphaBetaObj'
+      "36M":
+        $ref: '#/definitions/alphaBetaObj'
 
-    alphaBetaObj:
-      type: object
-      properties:
-        period:
-          type: string
-        asOf:
-          type: string
-        alpha:
-          type: number
-          format: double
-        beta:
-          type: number
-          format: double
+  alphaBetaObj:
+    type: object
+    properties:
+      period:
+        type: string
+      asOf:
+        type: string
+      alpha:
+        type: number
+        format: double
+      beta:
+        type: number
+        format: double
 
   financials:
     type: array
@@ -523,7 +534,7 @@ definitions:
           type: object
           properties:
             id:
-              $ref: statementId
+              $ref: '#/definitions/statementId'
             fiscalYearEnd:
               type: integer
             currencyId:
@@ -572,7 +583,6 @@ definitions:
               type: integer
             longTermDebt:
               type: integer
-            
 
   statementId:
     type: object
@@ -588,4 +598,3 @@ definitions:
       aorOrRestate:
         type: string
                   
-
