@@ -1,0 +1,136 @@
+swagger: '2.0'
+
+info:
+  version: "2.0.0"
+  title: Benzinga Earnings Calendar API
+  description: A REST API returns structured earnings data
+
+host: "api.benzinga.com"
+basePath: /api/v2
+
+schemes:
+  - http
+  - https
+
+produces:
+  - application/json
+  - application/xml
+security:
+  - token: []
+paths:
+  /calendar/earnings:
+    get:
+      summary: Returns the earnings data
+      parameters:
+        - name: pagesize
+          in: query 
+          type: integer
+          description: Number of results returned. Limit 1000.
+        - name: page
+          in: query
+          type: integer
+          description: Page offset
+        - name: date
+          in: query
+          type: string
+          format: YYYY-MM-DD
+          description: Date to query for calendar data. Shorthand for date_from and date_to if they are the same. Defaults for latest.
+        - name: date_from
+          in: query
+          type: string
+          format: YYYY-MM-DD
+          description: Date to query from point in time
+        - name: parameters[date_to]
+          in: query
+          type: string
+          format: YYYY-MM-DD
+          description: Date to query to point in time
+        - name: tickers
+          in: query
+          type: string
+          format: csv
+          description: One or more ticker symbols separated by a comma. All calendar accept this parameter. Ignored by Economics.
+        - name: parameters[updated]
+          in: query
+          type: integer
+          format: int64
+          description: Records last updated Unix timestamp (UTC). This will force the sort order to be Greater Than or Equal to the timestamp indicated.
+        - name: importance
+          in: query
+          type: integer
+          format: int64
+          description: The importance level to filter by. Uses Greater Than or Equal To the importance indicated.
+      responses:
+        "200":
+          description: dur
+          schema:
+            type: object
+            properties:
+              earnings:
+                $ref: '#/definitions/earnings'
+ 
+securityDefinitions:
+  token:
+    type: apiKey
+    name: "token"
+    in: query
+ 
+definitions:
+  earnings:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+        updated:
+          type: integer
+          description: Last updated timestamp, UTC
+        active:
+          type: integer
+          description: 1 = active item / 0 = delete or hide item (with field missing, assume 1)
+        date:
+          type: string
+          description: Announced Date on Calendar
+        time:
+          type: string
+          format: HH:MM:SS
+          description: Announced Time on Calendar, 24hr format
+        ticker:
+          type: string
+          description: Ticker Symbold (F, MSFT, etc...)
+        importance:
+          type: integer
+          description: Subjective Basis of How Important Event is to Market. 5=High
+        period:
+          type: string
+          format: Q[1-4]
+          description: Period of the earnings actual
+        period_year:
+          type: integer
+          format: XXXX
+          description: Period Year of the earnings actual
+        date_confirmed:
+          type: string
+          format: Y/N
+          description: If the report date was confirmed (vs est)
+        eps:
+          type: number
+          format: double
+          description: Comparable and Adjusted EPS
+        eps_estt:
+          type: number
+          format: double
+          description: Adjusted EPS Consensus Aggregate Analyst Estimate
+        eps_prior:
+          type: number
+          format: double
+          description: Adjusted EPS from Prior Period
+        revenue:
+          type: number
+          format: double
+          description: Revenue
+        revenue_es:
+          type: number
+          format: double
+          description: Revenue Consensus Analyst Estimate
