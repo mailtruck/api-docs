@@ -3,7 +3,6 @@ info:
   version: "2.0.0"
   title: Benzinga Fundamentals API
   description: Get financials, earnings ratios, financial ratios, and company data.
-
 host: "api.benzinga.com"
 basePath: /api/v2
 schemes:
@@ -17,47 +16,60 @@ security:
 paths:
   /fundamentals:
     get:
-      summary: "Get all of the available company data"
+      summary: "Get all of the available company data. Although symbols, isin, and cik are technically optional, if no parameters are included with the response, the result will be empty"
       parameters:
-        - name: symbols
-          in: query
-          description: One or more stock ticker symbol in comma separated list specifies company data to return
-          type: string
-          format: csv
-        - name: isin
-          in: query
-          description: One or more isin identifier in comma separated list specifies company data to return
-          type: string
-          format: csv
-        - name: cik
-          in: query
-          description: One or more cik identifier in comma separated list specifies company data to return
-          type: string
-          format: csv
+        - $ref: '#/parameters/accept'
+        - $ref: '#/parameters/symbols'
+        - $ref: '#/parameters/isin'
+        - $ref: '#/parameters/cik'
+        - $ref: '#/parameters/asOf'
       responses:
         "200":
           description: "An object including a response array containing an array of objects containing company data"
           schema:
             $ref: '#/definitions/FundamentalsResponse'
+
+  /fundamentals/valuationRatios:
+    get:
+      summary: "Returns the valuation ratios"
+      parameters:
+        - $ref: '#/parameters/accept'
+        - $ref: '#/parameters/symbols'
+        - $ref: '#/parameters/isin'
+        - $ref: '#/parameters/cik'
+        - $ref: '#/parameters/asOf'
+      responses:
+        "200":
+          description: "An object including a response that includes valuationRatio data"
+          schema:
+            $ref: '#definitions/FundamentalsValuationRatiosResponse'
+
+  /fundamentals/operationRatios:
+    get:
+      summary: "Returns the operation ratios"
+      parameters:
+        - $ref: '#/parameters/accept'
+        - $ref: '#/parameters/symbols'
+        - $ref: '#/parameters/isin'
+        - $ref: '#/parameters/cik'
+        - $ref: '#/parameters/asOf'
+      responses:
+        "200":
+          description: "An object including a response that includes operationRatio data"
+          schema:
+            $ref: '#definitions/FundamentalsOperationRatiosResponse'
+
   /fundamentals/financials:
     get:
-      summary: "Get the balance sheet and cashflow statement for a company"
+      summary: "Get the balance sheet and cashflow statement for a company. Although symbols, isin, and cik are technically optional, if no parameters are included with the response, the result will be empty"
       parameters:
-        - name: symbols
-          in: query
-          description: One or more stock ticker symbol in comma separated list specifies company data to return
-          type: string
-          format: csv
-        - name: isin
-          in: query
-          description: One or more isin identifier in comma separated list specifies company data to return
-          type: string
-          format: csv
-        - name: cik
-          in: query
-          description: One or more cik identifier in comma separated list specifies company data to return
-          type: string
-          format: csv
+        - $ref: '#/parameters/accept'
+        - $ref: '#/parameters/symbols'
+        - $ref: '#/parameters/isin'
+        - $ref: '#/parameters/cik'
+        - $ref: '#/parameters/asOf'
+        - $ref: '#/parameters/period'
+        - $ref: '#/parameters/reportType'
       responses:
         "200":
           description: "An object including a response array containing an array of objects containing company data"
@@ -97,6 +109,159 @@ definitions:
               $ref: '#/definitions/alphaBeta'
             processingTimeMillis:
               type: integer
+              
+  FundamentalsValuationRatiosResponse:
+    type: object
+    properties:
+      result:
+        type: array
+        items:
+          type: object
+          properties:
+            valuationRatios:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: object
+                  properties:
+                    shareClassId:
+                      type: string
+                    date:
+                      type: string
+                      format: YYYY-MM-DD
+                payoutRatio:
+                  type: number
+                  format: float
+                sustainableGrowthRate:
+                  type: number
+                  format: float
+                cashReturn:
+                  type: number
+                  format: float
+                salesPerShare:
+                  type: number
+                  format: float
+                bookValuePerShare:
+                  type: number
+                  format: float
+                cfoPerShare:
+                  type: number
+                  format: float
+                fcfPerShare:
+                  type: number
+                  format: float
+                earningYield:
+                  type: number
+                  format: float
+                peRatio:
+                  type: number
+                  format: float
+                salesYield:
+                  type: number
+                  format: float
+                psRatio:
+                  type: number
+                  format: float
+                bookValueYield:
+                  type: number
+                  format: float
+                pbRatio:
+                  type: number
+                  format: float
+                cfYield:
+                  type: number
+                  format: float
+                pcfRatio:
+                  type: number
+                  format: float
+                fcfYield:
+                  type: number
+                  format: float
+                fcfRatio:
+                  type: number
+                  format: float
+                trailingDividendYield:
+                  type: number
+                  format: float
+                forwardDividendYield:
+                  type: number
+                  format: float
+                forwardEarningYield:
+                  type: number
+                  format: float
+                forwardPeRatio:
+                  type: number
+                  format: float
+                pegRatio:
+                  type: number
+                  format: float
+                pegPayback:
+                  type: number
+                  format: float
+                tangibleBookValuePerShare:
+                  type: number
+                  format: float
+                tangibleBvPerShare3YrAvg:
+                  type: number
+                  format: float
+                tangibleBvPerShare5YrAvg:
+                  type: number
+                  format: float
+                forwardDividend:
+                  type: number
+                  format: float
+                workingCapitalPerShare:
+                  type: number
+                  format: float
+                workingCapitalPerShare3YrAvg:
+                  type: number
+                  format: float
+                workingCapitalPerShare5YrAvg:
+                  type: number
+                  format: float
+                evToEbitda:
+                  type: number
+                  format: float
+                buyBackYield:
+                  type: number
+                  format: float
+                totalYield:
+                  type: number
+                  format: float
+                ratioPe5YearAverage:
+                  type: number
+                  format: float
+                priceChange1M:
+                  type: number
+                  format: float
+                normalizedPeRatio:
+                  type: number
+                  format: float
+                pricetoEbitda:
+                  type: number
+                  format: float
+
+  FundamentalsOperationRatiosResponse:
+    type: object
+    properties:
+      result:
+        type: array
+        items:
+          type: object
+          properties:
+            company:
+              $ref: '#/definitions/company'
+            operationRatios:
+              3M:
+                $ref: '#/definitions/operationRatio'
+              6M:
+                $ref: '#/definitions/operationRatio'
+              9M:
+                $ref: '#/definitions/operationRatio'
+              1Y:
+                $ref: '#/definitions/operationRatio'
 
   FundamentalsFinancialsResponse:
     type: object
@@ -534,7 +699,18 @@ definitions:
           type: object
           properties:
             id:
-              $ref: '#/definitions/statementId'
+              type: object
+              properties:
+                companyId:
+                  type: string
+                asOf:
+                  type: string
+                reportType:
+                  type: string
+                period:
+                  type: string
+                aorOrRestate:
+                  type: string
             fiscalYearEnd:
               type: integer
             currencyId:
@@ -584,17 +760,64 @@ definitions:
             longTermDebt:
               type: integer
 
-  statementId:
-    type: object
-    properties:
-      companyId:
-        type: string
-      asOf:
-        type: string
-      reportType:
-        type: string
-      period:
-        type: string
-      aorOrRestate:
-        type: string
-                  
+
+parameters:
+  accept:
+    name: accept
+    in: header
+    description: Specifies return format
+    type: string
+    enum:
+      - application/json
+      - application/xml
+  symbols:
+    name: symbols
+    in: query
+    description: One or more stock ticker symbol in comma separated list specifies company data to return
+    type: string
+    format: csv
+  isin:
+    name: isin
+    in: query
+    description: One or more isin identifier in comma separated list specifies company data to return
+    type: string
+    format: csv
+  cik:
+    name: cik
+    in: query
+    description: One or more cik identifier in comma separated list specifies company data to return
+    type: string
+    format: csv
+  asOf:
+    name: asOf
+    in: query
+    description: Return results for dates greater than or equal date specified in this parameter
+    type: string
+    format: YYYY-MM-DD
+    required: false
+  period:
+    name: period
+    in: query
+    description: Specifies the time period of the returned results
+    type: string
+    default: ALL
+    enum:
+      - 3M
+      - 6M
+      - 9M
+      - 12M
+      - 1Y
+      - ALL
+      - TTM
+    required: false
+  reportType:
+    name: reportType
+    in: query
+    description: TTM, A (as originally reported), R (restated). P (Preliminary anouncements)
+    default: A
+    enum:
+      - TTM
+      - A
+      - R
+      - P
+    required: false
