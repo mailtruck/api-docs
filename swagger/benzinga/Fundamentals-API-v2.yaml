@@ -44,6 +44,22 @@ paths:
           schema:
             $ref: '#definitions/FundamentalsValuationRatiosResponse'
 
+  /fundamentals/earningRatios:
+    get:
+      summary: "Returns the earning ratios"
+      parameters:
+        - $ref: '#/parameters/accept'
+        - $ref: '#/parameters/symbols'
+        - $ref: '#/parameters/isin'
+        - $ref: '#/parameters/cik'
+        - $ref: '#/parameters/asOf'
+      responses:
+        "200":
+          description: "An object including a response that includes valuationRatio data"
+          schema:
+            $ref: '#definitions/FundamentalsEarningRatiosResponse'
+
+
   /fundamentals/operationRatios:
     get:
       summary: "Returns the operation ratios"
@@ -109,7 +125,59 @@ definitions:
               $ref: '#/definitions/alphaBeta'
             processingTimeMillis:
               type: integer
-              
+
+  FudametalsEarningRatiosResponse:
+    type: object
+    properties:
+      result:
+        type: array
+        items:
+          type: object
+          properties:
+            company:
+              $ref: '#/definitions/company'
+            earningRatios: 
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: object
+                    properties:
+                      shareClassId:
+                        type: string
+                      asOf:
+                        type: string
+                        format: YYY-MM-DD
+                      reportType:
+                        type: string
+                      period:
+                        type: string
+                      aorOrRestate:
+                        type: string
+                  fiscalYearEnd:
+                    type: integer
+                  dilutedEpsGrowth:
+                    type: number
+                    format: float
+                  dilutedConstEpsGrowth:
+                    type: number
+                    format: float
+                  dpsGrowth:
+                    type: number
+                    format: float
+                  equityPerShareGrowth:
+                    type: number
+                    format: float
+            symbol:
+              type: string
+            idType:
+              type: string
+            id:
+              type: string
+      processingTimeMillis:
+        type: integer
+            
   FundamentalsValuationRatiosResponse:
     type: object
     properties:
