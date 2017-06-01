@@ -19,7 +19,9 @@ paths:
         in: header
         type: string
         description: Specify return format.
-        enum: ["application/json","application/xml"]
+        enum:
+          - "application/json"
+          - "application/xml"
       - name: pageSize
         in: query
         type: integer
@@ -36,7 +38,10 @@ paths:
         type: string
         description: "Specify headline only, headline + teaser, or headline + full body text"
         default: headline
-        enum: ["full","abstract","headline"]
+        enum:
+          - "full"
+          - "abstract"
+          - "headline"
       - name: date
         in: query
         type: string
@@ -124,21 +129,21 @@ definitions:
         channels:
           type: array
           items:
-          - type: object
+            type: object
             properties:
               name:
                 type: string
         stocks:
           type: array
           items:
-          - type: object
+            type: object
             properties:
               name:
                 type: string
         tags:
           type: array
           items:
-          - type: object
+            type: object
             properties:
               name:
                 type: string
