@@ -1,0 +1,115 @@
+
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: Benzinga Logos API
+  description: "The Benzinga Corporate Logo API is designed to be flexible with client sizing requirements. Custom filters can be applied to resize the logos and each logo returns a variety of identifiers like isin and cusip."
+
+schemes:
+  - https
+  - http
+
+produces:
+  - application/json
+  - application/xml
+
+paths:
+  /api/v1/logos:
+    get:
+      description: |
+        Logos for market securities
+        
+          &nbsp;
+        
+        For JSON requests, apply the header:
+        
+        *Accept: application/json*
+      parameters:
+        - in: query
+          name: token
+          description: Client access token.
+          required: true
+          type: string
+        - in: query
+          name: symbols
+          description: A list of ticker symbols separated by a comma (,). Limit 50 tickers per request.
+          required: true
+          type: string
+        - in: query
+          name: filters
+          description: A list of client-specific filters to be applied. Filters are separated by a comma (,).
+          required: false
+          type: string
+      security:
+        - token: []
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: ArrayOfLogos
+            type: array
+            items:
+              $ref: "#/definitions/logos"
+
+securityDefinitions:
+  token:
+    type: apiKey
+    name: token
+    in: query
+
+definitions:
+  logos:
+    type: object
+    required:
+      - security
+      - files
+    properties:
+      created:
+        type: integer
+        format: int64
+      updated:
+        type: integer
+        format: int64
+      files:
+        $ref: "#/definitions/files"
+      security:
+        $ref: "#/definitions/security"
+  security:
+    type: object
+    description: A
+    required:
+      - cik
+      - name
+      - exchange
+      - symbol
+    properties:
+      symbol:
+        type: string
+        description: A
+      cik:
+        type: integer
+        format: int64
+        description: A
+      name:
+        type: string
+        description: A
+      exchange:
+        type: string
+        description: A
+  files:
+    type: object
+    description: Accession number, the SEC document identifier
+    required:
+      - original
+      - 90x60_white
+      - 90x60_grayscale
+    properties:
+      original:
+        type: string
+      90x60_white:
+        type: string
+      90x60_grayscale:
+        type: string
+      CUSTOM_FILTER:
+        type: string
